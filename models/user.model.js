@@ -6,12 +6,11 @@ const User = new mongoose.Schema(
 								required: [true, 'Please enter username'], 
 								unique: [true, 'Username has already been taken']
 							},
-		name: { type: String, default: "" },
 		email: { type: String, 
 						 required: [true, 'Please enter email'],
 						 unique: [true, 'Email has already been registered'] },
 		password: { type: String, required: [true, 'Please enter password'] },
-		dateCreated: { type: Date, required: true, default: Date.now }
+		name: { type: String, default: "" },
 	}, { timestamps: true }
 )
 
