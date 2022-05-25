@@ -3,12 +3,12 @@ import cors from "cors";
 import dotenv from "dotenv";
 // import path from "path";
 // import { fileURLToPath } from 'url';
-import connectDB from './connectDB.js'
+import connectDB from './utils/connectDB.js'
 import userRouter from './api/userRoutes.js'
 
 // Load environment variables
 dotenv.config() 
-const port = process.env.PORT
+const PORT = process.env.PORT
 
 // Connect to MongoDB
 connectDB()
@@ -23,8 +23,20 @@ app.use("/api/v1/users", userRouter)
 
 // app get, send
 app.get("/", (req, res) => {
-  res.json({message: "Request to Server"})
+  res.json({message: "KindaStonksAPI"})
 })
 
+if (process.env.NODE_ENV === "production") {
+	// Make node server serve static built files
+  const __dirname = path.dirname(fileURLToPath(import.meta.url));
+  app.use(express.static('client/build'));
+
+  //
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'));
+    //app.use(express.static(__dirname + '/public'));
+	});
+}
+
 // Start server, listen to corresponding port
-app.listen(port, () => console.log(`Server running on port ${port}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
