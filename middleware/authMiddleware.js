@@ -26,7 +26,6 @@ const protectRoute = (req, res, next) => {
     if (!token) {
       res.status(401)
       next(new Error('Not authorized, no token'))
-      return
     }
   }
 }

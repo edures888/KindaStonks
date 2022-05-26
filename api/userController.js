@@ -5,73 +5,73 @@ import User from "../models/user.model";
 export default class UserController {
   // Create new user to add to database
   static async registerUser(req, res) {
-    const { username, password, email, name } = req.body;
-    // Validate user
-    if (!username || !password || !email) {
-      res.status(400);
-      next(new Error("Missing fields for registering new user"));
+    try {
+      /* Using Model validators to ensure no duplicate user with same usename/email AND that all necessary fields are filled 
+      
+      if (!username || !password || !email) {
+      res.status(400).send("Missing fields for registering new user");
       return;
+      */
+
+      // Hashing password
+      const hashedPassword = await bcrypt.hash(req.body.password, 10);
+
+      const newUser = new User(...req.body, hashedPassword);
+      await newUser.save();
+      res.status(200).send("User registered");
+    } catch (error) {
+      res.status(500).send("Error creating new user" + error.messages);
+      next(error);
     }
-
-    // Hashing password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    const newUser = new User(...req.body, hashedPassword);
-    // Using Model validators to ensure no duplicate user with same usename/email
-    newUser
-      .save()
-      .then(() => res.status(200).send("User registered"))
-      .catch((err) => {
-        res.status(500).send("Error creating new user" + err.messages);
-        next(err);
-      });
   }
 
   // Authenticate user login information
   static async loginUser(req, res) {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
-    if (!user) {
-      res.status(400);
-      next(new Error("Invalid login credentials"));
-      return;
-    }
+    try {
+      // Use exec() for better stack traces
+      const user = await User.findOne({ username }).exec();
+      if (!user) {
+        res.status(400).send("Invalid login credentials");
+        return;
+      }
 
-    const passwordCheck = await bcrypt.compare(password, user.password);
-    if (passwordCheck) {
-      // RESPOND
-      res.status(200).json({
-        username: user.username,
-        token: generateToken(user._id)
-      });
-    } else {
-      res.status(400);
-      next(new Error("Invalid login credentials"));
-      return;
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (isPasswordValid) {
+        res.status(200).json({
+          email: user.email,
+          token: generateToken(user._id),
+        });
+      } else {
+        res.status(400).send("Invalid login credentials");
+      }
+    } catch (error) {
+      res.status(500).send("Error finding user" + error.messages);
+      next(error);
     }
   }
 
   // Generate Json Web Token
   static async generateToken(id) {
     return jwt.sign({ id }, process.env.JWT_PRIVATE, {
-      expiresIn: '7d'
-    })
+      expiresIn: "7d",
+    });
   }
 
   // Retrieve user details
   static async getUser(req, res) {
-    User.findById(req.user.id)
-        .then(() => res.status(200).json({
-            id: _id,
-            username,
-            email,
-            name
-          }))
-        .catch(err => {
-          res.status(500).send("Error retriving user details" + err.messages)
-          next(err);
-        })
+    try{
+      const user = await User.findById(req.user.id).exec()
+      res.status(200).json({
+        id: _id,
+        username,
+        email,
+        name,
+      })
+    } catch(error) {
+        res.status(500).send("Error retriving user details" + error.messages);
+        next(error);
+      };
   }
 }
