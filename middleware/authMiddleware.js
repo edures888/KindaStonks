@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken";
-import User from "../models/user.model";
+import User from "../models/user.model.js";
 
 
-const protectRoute = (req, res, next) => {
+const protectRoute =  async (req, res, next) => {
   let token
 
   const authHeader = req.headers.authorization
@@ -18,8 +18,8 @@ const protectRoute = (req, res, next) => {
       
       next()
     } catch(error) {
-      res.status(401)
-      next(new Error('Not authorized to access this route'))
+      res.status(401).send("No authorized access: " + error.message)
+      next(error)
       return
     }
 
