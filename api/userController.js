@@ -25,7 +25,7 @@ export default class UserController {
       await newUser.save();
       res.status(200).send("User registered");
     } catch (error) {
-      res.status(500).json({message: "Error creating new user: " + error.message});
+      res.status(500).send("Error creating new user: " + error.message);
       next(error);
     }
   }
