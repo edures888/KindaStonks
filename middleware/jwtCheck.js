@@ -1,8 +1,21 @@
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
 
+const jwtCheck = jwt({
+  secret: jwks.expressJwtSecret({
+      cache: true,
+      rateLimit: true,
+      jwksRequestsPerMinute: 5,
+      jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+}),
+  audience: process.env.AUTH0_AUDIENCE,
+  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  algorithms: ['RS256']
+});
 
-const protectRoute =  async (req, res, next) => {
+export default jwtCheck
+
+/* const protectRoute =  async (req, res, next) => {
   let token
 
   const authHeader = req.headers.authorization
@@ -28,6 +41,4 @@ const protectRoute =  async (req, res, next) => {
       next(new Error('Not authorized, no token'))
     }
   }
-}
-
-export default protectRoute
+} */

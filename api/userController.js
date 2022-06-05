@@ -53,7 +53,7 @@ export default class UserController {
         res.status(400).send("Invalid login credentials");
       }
     } catch (error) {
-      res.status(500).send("Error finding user: " + error.messages);
+      res.status(500).send("Error finding user: " + error.message);
       next(error);
     } 
   }
@@ -70,11 +70,18 @@ export default class UserController {
         name,
       })
     } catch(error) {
-        res.status(500).send("Error retriving user details" + error.messages);
+        res.status(500).send("Error retriving user details" + error.message);
         next(error);
       };
   }
 
+  static async protectedInfo(req, res, next) {
+    try {
+      res.status(200).json(message: "This is protected info")
+    } catch (error) {
+      res.statuss(500).send("Error retriving user details" + error.message);
+    }
+  }
 }
 
  // Generate Json Web Token
@@ -83,3 +90,5 @@ export default class UserController {
     expiresIn: "7d",
   });
 } 
+
+
