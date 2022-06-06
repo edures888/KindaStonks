@@ -4,7 +4,7 @@ import helmet from "helmet";
 import connectDB from './utils/connectDB.js'
 import userRouter from './api/userRoutes.js'
 import errorMiddleware from './middleware/errorMiddleware.js'
-import { clientOrigins, serverPort } from './utils/env.dev.js'
+import { clientOrigin, serverPort } from './utils/env.dev.js'
 
 // Connect to MongoDB
 connectDB()
@@ -12,7 +12,7 @@ connectDB()
 /* App configuration */
 const app = express()
 app.use(helmet())
-app.use(cors({ origin: clientOrigins}))
+app.use(cors({ origin: clientOrigin}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 

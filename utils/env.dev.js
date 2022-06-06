@@ -9,8 +9,9 @@ const nodeEnv = process.env.NODE_ENV;
 const audience = process.env.AUTH0_AUDIENCE;
 const domain = process.env.AUTH0_DOMAIN;
 const serverPort = process.env.PORT;
-const clientOriginUrl = nodeEnv === 'development' ? process.env.CLIENT_ORIGIN_URL : 'https://client-stonks.vercel.app/';
+const clientOriginUrl = process.env.CLIENT_ORIGIN_URL;
 const databaseURI = process.env.DB_URI;
+const clientOrigin = process.env.CLIENT_ORIGIN;
 
 if (!audience) {
   throw new Error(
@@ -36,13 +37,20 @@ if (!databaseURI) {
   );
 }
 
-const clientOrigins = nodeEnv === 'development' ? ['http://localhost:3000'] : ['https://client-stonks-staging.vercel.app/']
+if (!clientOrigin) {
+    throw new Error(
+      '.env is missing the definition of a CLIENT_ORIGIN environmental variable'
+    );
+  }
+
+//const clientOrigin = nodeEnv === 'development' ? 'http://localhost:3000' : 'https://client-stonks-staging.vercel.app'
+    //['http://localhost:3000'] : ['https://client-stonks-staging.vercel.app/']
 
 export {
   audience,
   domain,
   serverPort,
   clientOriginUrl,
-  clientOrigins,
+  clientOrigin,
   databaseURI,
 };
