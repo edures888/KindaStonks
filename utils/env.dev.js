@@ -36,7 +36,7 @@ if (!databaseURI) {
   );
 }
 
-const clientOrigins = nodeEnv === 'development' ? ['http://localhost:3000'] : ['https://client-stonks.vercel.app/']
+const clientOrigins = nodeEnv === 'development' ? ['http://localhost:3000'] : ['https://client-stonks-staging.vercel.app/']
 
 export {
   audience,
