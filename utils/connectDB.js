@@ -1,9 +1,11 @@
 import mongoose from "mongoose";
+import { databaseURI } from "./env.dev.js";
+
 /**
  * Establish connection to MongoDB
  */
 const connectDB = async () => {
-  mongoose.connect(process.env.DB_URI, {
+  mongoose.connect(databaseURI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     })

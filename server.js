@@ -1,22 +1,18 @@
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import helmet from "helmet";
 import connectDB from './utils/connectDB.js'
 import userRouter from './api/userRoutes.js'
 import errorMiddleware from './middleware/errorMiddleware.js'
-
-// Load environment variables
-dotenv.config() 
-const PORT = process.env.PORT
+import { clientOrigins, serverPort } from './utils/env.dev.js'
 
 // Connect to MongoDB
 connectDB()
 
-/* Setting up middlewares */
+/* App configuration */
 const app = express()
 app.use(helmet())
-app.use(cors({ origin: process.env.CLIENT_ORIGIN_URL}))
+app.use(cors({ origin: clientOrigins}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 
@@ -31,4 +27,4 @@ app.get("/", (req, res) => {
 })  
 
 // Listen to corresponding port once done
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(serverPort, () => console.log(`Server running on port ${serverPort}`));

@@ -1,44 +1,17 @@
-import jwt from "jsonwebtoken";
-import User from "../models/user.model.js";
+import { expressjwt } from "express-jwt";
+import jwksRsa from 'jwks-rsa'
+import { audience, domain } from "../utils/env.dev.js";
 
-const jwtCheck = jwt({
-  secret: jwks.expressJwtSecret({
+const jwtCheck = expressjwt({
+  secret: jwksRsa.expressJwtSecret({
       cache: true,
       rateLimit: true,
       jwksRequestsPerMinute: 5,
-      jwksUri: `https://${process.env.AUTH0_DOMAIN}/.well-known/jwks.json`
+      jwksUri: `https://${domain}/.well-known/jwks.json`
 }),
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  audience: audience,
+  issuer: `https://${domain}/`,
   algorithms: ['RS256']
 });
 
 export default jwtCheck
-
-/* const protectRoute =  async (req, res, next) => {
-  let token
-
-  const authHeader = req.headers.authorization
-  if (authHeader && authHeader.startsWith('Bearer')) {
-    try {
-      // Getting token from header
-      token = authHeader.split(' ')[1]
-
-      const decodedToken = jwt.verify(token, process.env.JWT_PRIVATE)
-      
-      // Get user from token and assign to Request object, excluding password
-      req.user = await User.findById(decodedToken.id).select('-password')
-      
-      next()
-    } catch(error) {
-      res.status(401).send("No authorized access: " + error.message)
-      next(error)
-      return
-    }
-
-    if (!token) {
-      res.status(401)
-      next(new Error('Not authorized, no token'))
-    }
-  }
-} */
