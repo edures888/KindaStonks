@@ -3,7 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import connectDB from './utils/connectDB.js'
 import userRouter from './api/userRoutes.js'
-import txnRouter from './api/txnRoutes'
+import transactionRouter from './api/transactionRoutes.js'
 import errorMiddleware from './middleware/errorMiddleware.js'
 import { clientOrigin, serverPort } from './utils/env.dev.js'
 
@@ -21,7 +21,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use("/api/v1/users", userRouter)
 
 //Router for Transaction API
-app.use("/api/v1/users", txnRouter)
+app.use("/api/v1/transactions", transactionRouter)
 
 // Current basic error middleware
 app.use(errorMiddleware)

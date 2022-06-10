@@ -14,7 +14,7 @@ const Transaction = new mongoose.Schema(
       type: String,
       required: false
     },
-    notes: {
+    note: {
       type: String,
       required: false
     },
@@ -22,5 +22,5 @@ const Transaction = new mongoose.Schema(
   { timestamps: true }
 );
 
-const txnModel = mongoose.model('Transaction', Transaction);
-export default txnModel;
+const transactionModel = mongoose.model('Transaction', Transaction);
+export default transactionModel;
