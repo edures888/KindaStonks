@@ -1,14 +1,14 @@
-import express from "express"
-import TransactionController from "./transactionController.js"
-import jwtCheck from "../middleware/jwtCheck.js"
+import express from 'express';
+import TransactionController from './transactionController.js';
+import jwtCheck from '../middleware/jwtCheck.js';
 
-const router = express.Router()
+const router = express.Router();
 
 router
-    .route('/')
-    .post(TransactionController.addTransaction)
-    .get(TransactionController.getTransactions)
+  .route('/')
+  .post(TransactionController.addTransaction)
+  .get(TransactionController.getTransactions);
 
-router.route('/:id').delete(TransactionController.deleteTransaction)
+router.route('/:id').delete(TransactionController.deleteTransaction);
 
-export default router
+export default router;
