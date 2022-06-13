@@ -34,7 +34,7 @@ export default class TransactionController {
   }
 
   // Retrieve ALL transaction details
-  static async getTransactions(req, res, next) {
+  static async getAllTransactions(req, res, next) {
     try {
       const transactions = await Transaction.find();
 
@@ -50,7 +50,7 @@ export default class TransactionController {
   }
 
   // Get user-specific transactions
-  static async getUserTransaction(req, res, next) {
+  static async getUserTransactions(req, res, next) {
     try {
       const { user_id } = req.body;
       const transactions = await Transaction.find({ user_id });

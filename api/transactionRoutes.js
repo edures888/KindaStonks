@@ -7,7 +7,10 @@ const router = express.Router();
 router
   .route('/')
   .post(TransactionController.addTransaction)
-  .get(TransactionController.getTransactions);
+  .get(TransactionController.getUserTransactions);
+
+// Only for testing, not user-protected
+router.route('/all').get(TransactionController.getAllTransactions);
 
 router.route('/:id').delete(TransactionController.deleteTransaction);
 
