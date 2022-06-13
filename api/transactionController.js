@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import Transaction from '../models/transaction.model.js';
 
 export default class TransactionController {
