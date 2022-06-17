@@ -35,7 +35,7 @@ export default class AssetController {
     try {
       const { user_id } = req.body;
       const assets = await Asset.find({ user_id });
-
+      // to be changed
       res.status(200).json({
         success: true,
         count: assets.length,
