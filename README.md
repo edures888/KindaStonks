@@ -1,13 +1,4 @@
-# unifi
-# Project Log
+# stonks! (Backend) 
 
-
-$project
 ========
-...
-
-Features
 --------
-...
-
-Access: herokuapp
