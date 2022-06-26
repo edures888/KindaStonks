@@ -1,16 +1,16 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import connectDB from './utils/connectDB.js';
+import { connectDB } from './utils/connectDB.js';
 import transactionRouter from './api/transactionRoutes.js';
-import assetRouter from './api/assetRoutes.js'
+import assetRouter from './api/assetRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
-import { clientOriginUrl, serverPort } from './utils/env.dev.js';
+import { clientOriginUrl, nodeEnv, serverPort } from './utils/env.dev.js';
 import jwtCheck from './middleware/jwtCheck.js';
-import userMiddleware from './middleware/userMiddleware.js'
+import userMiddleware from './middleware/userMiddleware.js';
 
 // Connect to MongoDB
-connectDB();
+if (nodeEnv != 'test') connectDB();
 
 /* App configuration */
 const app = express();
@@ -44,6 +44,8 @@ app.use('/api/v1/assets', userMiddleware, assetRouter);
 app.use(errorMiddleware);
 
 // Listen to corresponding port once done
-app.listen(serverPort, () =>
+const server = app.listen(serverPort, () =>
   console.log(`Server running on port ${serverPort}`)
 );
+
+export { app, server };

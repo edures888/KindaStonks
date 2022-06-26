@@ -40,4 +40,4 @@ if (!databaseURI) {
   );
 }
 
-export { audience, domain, serverPort, clientOriginUrl, databaseURI };
+export { nodeEnv, audience, domain, serverPort, clientOriginUrl, databaseURI };
