@@ -110,7 +110,8 @@ describe('Transaction Positive Test Cases', () => {
         .delete(`/api/v1/transactions/${transaction_id}`)
         .auth(access_token, { type: 'bearer' });
       expect(res).to.have.status(200);
-      expect(res.text).to.be.a('string', `${transaction_id} deleted`);
+      expect(res.text).to.be.a('string');
+      expect(res.text).to.equal(`${transaction_id} deleted`);
     });
   });
 });
@@ -123,8 +124,22 @@ describe('Transaction Negative Test Cases', () => {
     it('Should return unauthorised error', async () => {
       const res = await chai.request(app).get('/details');
       expect(res).to.have.status(401);
-      expect(res.text).to.be.a(
-        'string',
+      expect(res.text).to.be.a('string');
+      expect(res.text).to.include(
+        'UnauthorizedError: No authorization token was found'
+      );
+    });
+  });
+
+  describe('POST /api/v1/transactions/', () => {
+    it('Should not create a transaction as no authorization token is provided', async () => {
+      const res = await chai
+        .request(app)
+        .post('/api/v1/transactions/')
+        .send({ amount: 1, date: Date.now() });
+      expect(res).to.have.status(401);
+      expect(res.text).to.be.a('string');
+      expect(res.text).to.include(
         'UnauthorizedError: No authorization token was found'
       );
     });
@@ -138,30 +153,30 @@ describe('Transaction Negative Test Cases', () => {
         .auth(access_token, { type: 'bearer' })
         .send({ date: Date.now() });
       expect(res).to.have.status(400);
-      expect(res.text).to.be.an(
-        'string',
-        'Missing amount for adding Transaction'
-      );
+      expect(res.text).to.be.a('string');
+      expect(res.text).to.equal('Missing amount for adding Transaction');
     });
   });
 
-  describe('DELETE /', () => {
+  describe('DELETE /api/v1/transactions/', () => {
     it('Should not delete note due to invalid ID', async () => {
       const res = await chai
         .request(app)
-        .delete(`/api/note/${invalid_transaction_id}`)
+        .delete(`/api/v1/transactions/${invalid_transaction_id}`)
         .auth(access_token, { type: 'bearer' });
-      expect(res).to.have.status(404);
-      expect(res.text).to.be.an('string', 'No transaction found');
+      expect(res).to.have.status(500);
+      expect(res.text).to.be.a('string');
+      expect(res.text).to.include('Error deleting transaction:');
     });
 
     it('Should not delete note due to record not found', async () => {
       const res = await chai
         .request(app)
-        .delete(`/api/note/hard-delete/${valid_note_id}`)
+        .delete(`/api/v1/transactions/${valid_note_id}`)
         .auth(access_token, { type: 'bearer' });
       expect(res).to.have.status(404);
-      expect(res.text).to.be.an('string', 'No transaction found');
+      expect(res.text).to.be.a('string');
+      expect(res.text).to.equal('No transaction found');
     });
   });
 });

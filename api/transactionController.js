@@ -68,7 +68,7 @@ export default class TransactionController {
     try {
       const { user_id } = req.body;
       const transaction = await Transaction.findById(req.params.id).exec();
-
+      
       if (!transaction) {
         res.status(404).send('No transaction found');
         return;
