@@ -10,9 +10,8 @@ export default class TransactionController {
         return;
       }
 
-      // REMOVE after testing
-      if (!user_id) {
-        res.status(400).send('Missing owner for adding Transaction');
+      if (!date) {
+        res.status(400).send('Missing date for adding Transaction');
         return;
       }
 
@@ -25,7 +24,7 @@ export default class TransactionController {
       });
 
       await newTransaction.save();
-      res.status(200).send('Transaction saved');
+      res.status(200).json(newTransaction);
     } catch (error) {
       res.status(500).send('Error adding transaction: ' + error.message);
       next(error);
