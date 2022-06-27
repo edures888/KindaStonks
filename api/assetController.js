@@ -10,6 +10,10 @@ export default class AssetController {
         res.status(400).send('Missing position for adding Asset');
         return;
       }
+      if (!type) {
+        res.status(400).send('Missing type for adding Asset');
+        return;
+      }
 
       const newAsset = new Asset({
         user_id,
@@ -23,7 +27,7 @@ export default class AssetController {
       });
 
       await newAsset.save();
-      res.status(200).send('Asset saved');
+      res.status(200).json(newAsset);
     } catch (error) {
       res.status(500).send('Error adding asset: ' + error.message);
       next(error);
