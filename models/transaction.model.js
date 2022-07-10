@@ -1,19 +1,19 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const Transaction = new mongoose.Schema(
+const transactionSchema = new mongoose.Schema(
   {
     user_id: {
       type: String,
-      required: [true, "No owner specified"],
+      required: [true, 'No owner specified'],
     },
     amount: {
       type: Number,
-      required: [true, "No amount input"],
+      required: [true, 'No amount input'],
     },
     date: {
       type: Date,
       default: Date.now,
-      required: [true, "No date input"],
+      required: [true, 'No date input'],
     },
     category: {
       type: String,
@@ -27,5 +27,5 @@ const Transaction = new mongoose.Schema(
   { timestamps: true }
 );
 
-const transactionModel = mongoose.model("Transaction", Transaction);
-export default transactionModel;
+const Transaction = mongoose.model('Transaction', transactionSchema);
+export default Transaction;
