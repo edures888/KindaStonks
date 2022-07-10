@@ -1,15 +1,15 @@
 import mongoose from 'mongoose';
 
-const Asset = new mongoose.Schema(
+const assetSchema = new mongoose.Schema(
   {
     name: {
-      type: String
+      type: String,
     },
     symbol: {
-      type: String
+      type: String,
     },
     api_id: {
-      type: String
+      type: String,
     },
     user_id: {
       type: String,
@@ -20,7 +20,7 @@ const Asset = new mongoose.Schema(
       required: [true, 'Please enter position'],
     },
     cost_basis: {
-      type: String
+      type: String,
     },
     date: {
       type: Date,
@@ -37,5 +37,5 @@ const Asset = new mongoose.Schema(
   { timestamps: true }
 );
 
-const assetModel = mongoose.model('Asset', Asset);
-export default assetModel;
+const Asset = mongoose.model('Asset', assetSchema);
+export { Asset, assetSchema };

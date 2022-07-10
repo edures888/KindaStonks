@@ -4,12 +4,13 @@ import helmet from 'helmet';
 import { connectDB } from './utils/connectDB.js';
 import transactionRouter from './api/transactionRoutes.js';
 import assetRouter from './api/assetRoutes.js';
+import activeAssetRouter from './api/activeAssetRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import { clientOriginUrl, nodeEnv, serverPort } from './utils/env.dev.js';
 import jwtCheck from './middleware/jwtCheck.js';
 import userMiddleware from './middleware/userMiddleware.js';
 
-// Connect to MongoDB
+// Connect to MongoDB, if not testing
 if (nodeEnv != 'test') connectDB();
 
 /* App configuration */
@@ -37,8 +38,9 @@ app.get('/details', async (req, res, next) => {
 });
 
 // Routes for Transaction & Asset API, includes usage of userMiddleware
-app.use('/api/v1/transactions', userMiddleware, transactionRouter);
-app.use('/api/v1/assets', userMiddleware, assetRouter);
+app.use('/api/transactions', userMiddleware, transactionRouter);
+app.use('/api/assets', userMiddleware, assetRouter);
+app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
 
 // Basic error middleware
 app.use(errorMiddleware);

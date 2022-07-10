@@ -1,10 +1,19 @@
-import Asset from '../models/asset.model.js';
+import { Asset } from '../models/asset.model.js';
 
 export default class AssetController {
   // Add a new Asset
   static async addAsset(req, res, next) {
-    const { name, symbol, api_id, user_id, position, cost_basis, type, note } =
-      req.body;
+    const {
+      name,
+      symbol,
+      api_id,
+      user_id,
+      position,
+      cost_basis,
+      type,
+      note,
+      date,
+    } = req.body;
     try {
       if (!position) {
         res.status(400).send('Missing position for adding Asset');
@@ -24,6 +33,7 @@ export default class AssetController {
         cost_basis,
         type,
         note,
+        date,
       });
 
       await newAsset.save();
@@ -35,7 +45,7 @@ export default class AssetController {
   }
 
   // Get user-specific assets
-  static async getUserAssets(req, res, next) {
+  static async getUserHistory(req, res, next) {
     try {
       const { user_id } = req.body;
       const assets = await Asset.find({ user_id });

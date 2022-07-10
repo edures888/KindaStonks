@@ -5,8 +5,8 @@ const router = express.Router();
 
 router
   .route('/')
-  .post(AssetController.addAsset)
-  .get(AssetController.getUserAssets);
+  .get(AssetController.getUserHistory)
+  .post(AssetController.addAsset);
 
 router.route('/:id').delete(AssetController.deleteAsset);
 
