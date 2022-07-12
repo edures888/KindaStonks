@@ -57,7 +57,7 @@ export default class ActiveAssetController {
       }
       res.status(200).json(updateResult);
     } catch (error) {
-      res.status(500).send('Error updating active asset: ' + error.message);
+      // res.status(500).send('Error updating active asset: ' + error.message);
       next(error);
     }
   }
@@ -74,7 +74,7 @@ export default class ActiveAssetController {
         data: assets,
       });
     } catch (error) {
-      res.status(500).send('Error retriving inventory: ' + error.message);
+      // res.status(500).send('Error retriving inventory: ' + error.message);
       next(error);
     }
   }
@@ -98,7 +98,7 @@ export default class ActiveAssetController {
 
       res.status(200).send(req.params.id + ' active asset deleted');
     } catch (error) {
-      res.status(500).send('Error deleting active asset: ' + error.message);
+      // res.status(500).send('Error deleting active asset: ' + error.message);
       next(error);
     }
   }

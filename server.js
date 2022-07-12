@@ -5,6 +5,7 @@ import { connectDB } from './utils/connectDB.js';
 import transactionRouter from './api/transactionRoutes.js';
 import assetRouter from './api/assetRoutes.js';
 import activeAssetRouter from './api/activeAssetRoutes.js';
+import fetchStockRouter from './api/fetchStockRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import { clientOriginUrl, nodeEnv, serverPort } from './utils/env.dev.js';
 import jwtCheck from './middleware/jwtCheck.js';
@@ -37,10 +38,12 @@ app.get('/details', async (req, res, next) => {
   }
 });
 
-// Routes for Transaction & Asset API, includes usage of userMiddleware
+// Routes for Transaction, Asset and Active Assets API, includes usage of userMiddleware
 app.use('/api/transactions', userMiddleware, transactionRouter);
 app.use('/api/assets', userMiddleware, assetRouter);
 app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
+// Route for fetching stock prices will require authorization as well, to prevent people who are not logged in from spamming API queries to Stock API
+app.use('/api/fetchStock', userMiddleware, fetchStockRouter);
 
 // Basic error middleware
 app.use(errorMiddleware);

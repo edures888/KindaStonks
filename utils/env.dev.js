@@ -15,6 +15,7 @@ const clientOriginUrl =
     ? process.env.DEV_CLIENT_ORIGIN_URL
     : process.env.PROD_CLIENT_ORIGIN_URL;
 const databaseURI = process.env.DB_URI;
+const alphaAPIKey = process.env.ALPHA_KEY;
 
 if (!audience) {
   throw new Error(
@@ -40,4 +41,18 @@ if (!databaseURI) {
   );
 }
 
-export { nodeEnv, audience, domain, serverPort, clientOriginUrl, databaseURI };
+if (!alphaAPIKey) {
+  throw new Error(
+    '.env is missing the definition of a ALPHA_KEY environmental variable'
+  );
+}
+
+export {
+  nodeEnv,
+  audience,
+  domain,
+  serverPort,
+  clientOriginUrl,
+  databaseURI,
+  alphaAPIKey,
+};

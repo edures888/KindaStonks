@@ -39,7 +39,7 @@ export default class AssetController {
       await newAsset.save();
       res.status(200).json(newAsset);
     } catch (error) {
-      res.status(500).send('Error adding asset: ' + error.message);
+      // res.status(500).send('Error adding asset: ' + error.message);
       next(error);
     }
   }
@@ -49,14 +49,13 @@ export default class AssetController {
     try {
       const { user_id } = req.body;
       const assets = await Asset.find({ user_id });
-      // to be changed
       res.status(200).json({
         success: true,
         count: assets.length,
         data: assets,
       });
     } catch (error) {
-      res.status(500).send('Error retriving asset: ' + error.message);
+      // res.status(500).send('Error retriving asset: ' + error.message);
       next(error);
     }
   }
@@ -80,7 +79,7 @@ export default class AssetController {
 
       res.status(200).send(req.params.id + ' deleted');
     } catch (error) {
-      res.status(500).send('Error deleting asset: ' + error.message);
+      // res.status(500).send('Error deleting asset: ' + error.message);
       next(error);
     }
   }
