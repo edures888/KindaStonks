@@ -26,7 +26,7 @@ export default class TransactionController {
       await newTransaction.save();
       res.status(200).json(newTransaction);
     } catch (error) {
-      res.status(500).send('Error adding transaction: ' + error.message);
+      // res.status(500).send('Error adding transaction: ' + error.message);
       next(error);
     }
   }
@@ -42,7 +42,7 @@ export default class TransactionController {
         data: transactions,
       });
     } catch (error) {
-      res.status(500).send('Error retriving transaction: ' + error.message);
+      // res.status(500).send('Error retriving transaction: ' + error.message);
       next(error);
     }
   }
@@ -59,7 +59,7 @@ export default class TransactionController {
         data: transactions,
       });
     } catch (error) {
-      res.status(500).send('Error retriving transaction: ' + error.message);
+      // res.status(500).send('Error retriving transaction: ' + error.message);
       next(error);
     }
   }
@@ -83,7 +83,7 @@ export default class TransactionController {
 
       res.status(200).send(req.params.id + ' deleted');
     } catch (error) {
-      res.status(500).send('Error deleting transaction: ' + error.message);
+      // res.status(500).send('Error deleting transaction: ' + error.message);
       next(error);
     }
   }
