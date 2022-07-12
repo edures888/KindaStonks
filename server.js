@@ -3,6 +3,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { connectDB } from './utils/connectDB.js';
 import transactionRouter from './api/transactionRoutes.js';
+import streakRouter from './api/streakRoutes.js'
 import assetRouter from './api/assetRoutes.js';
 import activeAssetRouter from './api/activeAssetRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
@@ -39,6 +40,7 @@ app.get('/details', async (req, res, next) => {
 
 // Routes for Transaction & Asset API, includes usage of userMiddleware
 app.use('/api/transactions', userMiddleware, transactionRouter);
+app.use('/api/streak', userMiddleware,streakRouter);
 app.use('/api/assets', userMiddleware, assetRouter);
 app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
 
