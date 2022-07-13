@@ -68,37 +68,53 @@ export default class ActiveAssetController {
   static async getUserInventory(req, res, next) {
     try {
       const { user_id } = req.body;
+      // lean() for assets to be raw JSON object, instead of Mongoose Document
       const assets = await ActiveAsset.find({ user_id }).lean();
       let fetchSuccess = true;
-      let priceResponse;
+
       // Price fetching for all assets
-      assets.forEach(async (asset) => {
+      assets.map((asset) => {
         if (asset.type === 'stocks') {
-          priceResponse = await axios.get(
-            `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${asset.symbol}&apikey=${alphaAPIKey}`
-          );
+          axios
+            .get(
+              `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${asset.symbol}&apikey=${alphaAPIKey}`
+            )
+            .then((res) => {
+              asset.price = res.data['Global Quote']['05. price'];
+              console.log(asset);
+              // setting object property in promise then, scopes
+            })
+            .catch((err) => {
+              console.log(err);
+              fetchSuccess = false;
+            });
+          // Possible use better error handling
         } else {
-          priceResponse = await axios.get(
-            `https://api.coingecko.com/api/v3/coins/${asset.api_id}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`
-          );
+          axios
+            .get(
+              `https://api.coingecko.com/api/v3/coins/${asset.api_id}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`
+            )
+            .then((res) => {
+              asset.price = res.data.market_data.current_price.sgd;
+            })
+            .catch((err) => {
+              console.log(err);
+              fetchSuccess = false;
+            });
         }
 
-        if (!priceResponse.data) {
-          fetchSuccess = false;
-        }
-
-        asset.price =
-          asset.type === 'stonks'
-            ? priceResponse.data['Global Quote']['05. price']
-            : priceResponse.data.market_data.current_price.sgd;
+        // Convert Date object in date to String
+        asset.date = asset.date.toISOString();
+        console.log('asset', asset.price);
       });
+      //console.log('Response array', assets);
       // If any price fetching returns empty data
       if (!fetchSuccess) {
         res
           .status(500)
           .send(
             'Error retrieving inventory: ' +
-              'Unable to retrieve current price from AlphaVantage'
+              'Unable to retrieve current price from Stock/Crypto APIs'
           );
       }
 
