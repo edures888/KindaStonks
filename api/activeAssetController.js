@@ -1,4 +1,6 @@
+import axios from 'axios';
 import ActiveAsset from '../models/activeAsset.model.js';
+import { alphaAPIKey } from '../utils/env.dev.js';
 
 export default class ActiveAssetController {
   // Adds a new Active Asset if it doesnt already exist in user inventory
@@ -66,8 +68,40 @@ export default class ActiveAssetController {
   static async getUserInventory(req, res, next) {
     try {
       const { user_id } = req.body;
-      const assets = await ActiveAsset.find({ user_id });
-      // to be changed
+      const assets = await ActiveAsset.find({ user_id }).lean();
+      let fetchSuccess = true;
+      let priceResponse;
+      // Price fetching for all assets
+      assets.forEach(async (asset) => {
+        if (asset.type === 'stocks') {
+          priceResponse = await axios.get(
+            `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${asset.symbol}&apikey=${alphaAPIKey}`
+          );
+        } else {
+          priceResponse = await axios.get(
+            `https://api.coingecko.com/api/v3/coins/${asset.api_id}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`
+          );
+        }
+
+        if (!priceResponse.data) {
+          fetchSuccess = false;
+        }
+
+        asset.price =
+          asset.type === 'stonks'
+            ? priceResponse.data['Global Quote']['05. price']
+            : priceResponse.data.market_data.current_price.sgd;
+      });
+      // If any price fetching returns empty data
+      if (!fetchSuccess) {
+        res
+          .status(500)
+          .send(
+            'Error retrieving inventory: ' +
+              'Unable to retrieve current price from AlphaVantage'
+          );
+      }
+
       res.status(200).json({
         success: true,
         count: assets.length,
