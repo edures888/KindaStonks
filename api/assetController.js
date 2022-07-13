@@ -52,7 +52,7 @@ export default class AssetController {
       res.status(200).json({
         success: true,
         count: assets.length,
-        data: assets,
+        data: assets.sort((a, b) => b - a),
       });
     } catch (error) {
       // res.status(500).send('Error retriving asset: ' + error.message);
