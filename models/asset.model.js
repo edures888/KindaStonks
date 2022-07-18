@@ -20,7 +20,8 @@ const assetSchema = new mongoose.Schema(
       required: [true, 'Please enter position'],
     },
     cost_basis: {
-      type: String,
+      type: Number,
+      required: [true, 'Please enter Cost Basis'],
     },
     date: {
       type: Date,
