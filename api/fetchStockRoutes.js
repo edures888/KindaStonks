@@ -5,7 +5,6 @@ import { alphaAPIKey } from '../utils/env.dev.js';
 const router = express.Router();
 
 router.route('/:symbol').get(async (req, res, next) => {
-  console.log('running fetch');
   try {
     const symbol = req.params.symbol;
     const response = await axios.get(
