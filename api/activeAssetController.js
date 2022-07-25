@@ -26,6 +26,10 @@ export default class ActiveAssetController {
         res.status(400).send('Missing type for adding Asset');
         return;
       }
+      if (!cost_basis) {
+        res.status(400).send('Missing cost basis for adding Asset');
+        return;
+      }
 
       const existingAsset = await ActiveAsset.findOne({
         name,
@@ -50,7 +54,10 @@ export default class ActiveAssetController {
           updateResult.asset = name;
           updateResult.status = 'No more owned units, existing asset removed';
         } else {
-          existingAsset.cost_basis += cost_basis;
+          existingAsset.cost_basis =
+            position < 0
+              ? existingAsset.cost_basis - cost_basis
+              : existingAsset.cost_basis + cost_basis;
           existingAsset.date = date;
           await existingAsset.save();
           updateResult.asset = existingAsset;
@@ -65,6 +72,7 @@ export default class ActiveAssetController {
   }
 
   // Get user-specific active assets, or inventory list
+  // Post-Milestone 3: Includes Market API querying
   static async getUserInventory(req, res, next) {
     try {
       const { user_id } = req.body;
@@ -155,7 +163,3 @@ export default class ActiveAssetController {
     }
   }
 }
-
-const addPriceToAssets = (assets) => {
-  Promise.all(assets.map());
-};
