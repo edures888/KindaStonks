@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import { connectDB } from './utils/connectDB.js';
 import transactionRouter from './api/transactionRoutes.js';
+import streakRouter from './api/streakRoutes.js'
+import checkinRouter from './api/checkinRoutes.js';
 import assetRouter from './api/assetRoutes.js';
 import activeAssetRouter from './api/activeAssetRoutes.js';
 import fetchStockRouter from './api/fetchStockRoutes.js';
