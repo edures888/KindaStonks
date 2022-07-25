@@ -11,7 +11,7 @@ const audience = process.env.AUTH0_AUDIENCE;
 const domain = process.env.AUTH0_DOMAIN;
 const serverPort = process.env.PORT;
 const clientOriginUrl =
-  nodeEnv === 'development'
+  nodeEnv === 'development' || nodeEnv === 'test'
     ? process.env.DEV_CLIENT_ORIGIN_URL
     : process.env.PROD_CLIENT_ORIGIN_URL;
 const databaseURI = process.env.DB_URI;

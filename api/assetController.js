@@ -23,6 +23,10 @@ export default class AssetController {
         res.status(400).send('Missing type for adding Asset');
         return;
       }
+      if (!cost_basis) {
+        res.status(400).send('Missing cost basis for adding Asset');
+        return;
+      }
 
       const newAsset = new Asset({
         user_id,

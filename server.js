@@ -7,7 +7,6 @@ import streakRouter from './api/streakRoutes.js'
 import checkinRouter from './api/checkinRoutes.js';
 import assetRouter from './api/assetRoutes.js';
 import activeAssetRouter from './api/activeAssetRoutes.js';
-import fetchStockRouter from './api/fetchStockRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import { clientOriginUrl, nodeEnv, serverPort } from './utils/env.dev.js';
 import jwtCheck from './middleware/jwtCheck.js';
@@ -36,7 +35,7 @@ app.get('/details', async (req, res, next) => {
   try {
     res.status(200).json({ message: 'This is protected info' });
   } catch (error) {
-    res.status(500).send('Error retriving user details' + error.message);
+    next(error);
   }
 });
 
@@ -46,8 +45,6 @@ app.use('/api/streak', userMiddleware,streakRouter);
 app.use('/api/checkin', userMiddleware,checkinRouter);
 app.use('/api/assets', userMiddleware, assetRouter);
 app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
-// Route for fetching stock prices will require authorization as well, to prevent people who are not logged in from spamming API queries to Stock API
-app.use('/api/fetchStock', userMiddleware, fetchStockRouter);
 
 // Basic error middleware
 app.use(errorMiddleware);
