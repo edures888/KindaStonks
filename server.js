@@ -40,6 +40,8 @@ app.get('/details', async (req, res, next) => {
 
 // Routes for Transaction, Asset and Active Assets API, includes usage of userMiddleware
 app.use('/api/transactions', userMiddleware, transactionRouter);
+app.use('/api/streak', userMiddleware,streakRouter);
+app.use('/api/checkin', userMiddleware,checkinRouter);
 app.use('/api/assets', userMiddleware, assetRouter);
 app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
 // Route for fetching stock prices will require authorization as well, to prevent people who are not logged in from spamming API queries to Stock API
