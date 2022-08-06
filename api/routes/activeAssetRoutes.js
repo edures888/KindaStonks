@@ -1,5 +1,5 @@
 import express from 'express';
-import ActiveAssetController from './activeAssetController.js';
+import ActiveAssetController from '../controllers/activeAssetController';
 
 const router = express.Router();
 

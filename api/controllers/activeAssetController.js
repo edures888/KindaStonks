@@ -1,6 +1,6 @@
 import axios from 'axios';
-import ActiveAsset from '../models/activeAsset.model.js';
-import { alphaAPIKey } from '../utils/env.dev.js';
+import ActiveAsset from '../../models/activeAsset.model.js';
+import { alphaAPIKey } from '../../utils/env.dev.js';
 
 export default class ActiveAssetController {
   // Adds a new Active Asset if it doesnt already exist in user inventory

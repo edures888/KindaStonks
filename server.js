@@ -1,16 +1,17 @@
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 import helmet from 'helmet';
-import { connectDB } from './utils/connectDB.js';
-import transactionRouter from './api/transactionRoutes.js';
-import streakRouter from './api/streakRoutes.js'
-import checkinRouter from './api/checkinRoutes.js';
-import assetRouter from './api/assetRoutes.js';
-import activeAssetRouter from './api/activeAssetRoutes.js';
+import activeAssetRouter from './api/routes/activeAssetRoutes.js';
+import assetRouter from './api/routes/assetRoutes.js';
+import checkinRouter from './api/routes/checkinRoutes.js';
+import streakRouter from './api/routes/streakRoutes.js';
+import transactionRouter from './api/routes/transactionRoutes.js';
+import watchlistItemRouter from './api/routes/watchlistRoutes';
 import errorMiddleware from './middleware/errorMiddleware.js';
-import { clientOriginUrl, nodeEnv, serverPort } from './utils/env.dev.js';
 import jwtCheck from './middleware/jwtCheck.js';
 import userMiddleware from './middleware/userMiddleware.js';
+import { connectDB } from './utils/connectDB.js';
+import { clientOriginUrl, nodeEnv, serverPort } from './utils/env.dev.js';
 
 // Connect to MongoDB, if not testing
 if (nodeEnv != 'test') connectDB();
@@ -41,10 +42,11 @@ app.get('/details', async (req, res, next) => {
 
 // Routes for Transaction, Asset and Active Assets API, includes usage of userMiddleware
 app.use('/api/transactions', userMiddleware, transactionRouter);
-app.use('/api/streak', userMiddleware,streakRouter);
-app.use('/api/checkin', userMiddleware,checkinRouter);
+app.use('/api/streak', userMiddleware, streakRouter);
+app.use('/api/checkin', userMiddleware, checkinRouter);
 app.use('/api/assets', userMiddleware, assetRouter);
 app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
+app.use('/api/watchlist', userMiddleware, watchlistItemRouter);
 
 // Basic error middleware
 app.use(errorMiddleware);

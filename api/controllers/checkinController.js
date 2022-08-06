@@ -1,4 +1,4 @@
-import Checkin from "../models/checkin.model.js";
+import Checkin from "../../models/checkin.model.js";
 import { isToday } from "date-fns";
 
 export default class CheckinController {

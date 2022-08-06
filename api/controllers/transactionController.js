@@ -1,4 +1,4 @@
-import Transaction from '../models/transaction.model.js';
+import Transaction from '../../models/transaction.model.js';
 
 export default class TransactionController {
   // Add a new transaction

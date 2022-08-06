@@ -1,5 +1,5 @@
 import express from "express";
-import CheckinController from "./checkinController.js";
+import CheckinController from "../controllers/checkinController";
 
 const router = express.Router();
 

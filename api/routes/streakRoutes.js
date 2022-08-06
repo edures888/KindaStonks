@@ -1,5 +1,5 @@
 import express from "express";
-import StreakController from "./streakController.js";
+import StreakController from "../controllers/streakController";
 
 const router = express.Router();
 

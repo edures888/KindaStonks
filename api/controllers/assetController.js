@@ -1,4 +1,4 @@
-import { Asset } from '../models/asset.model.js';
+import { Asset } from '../../models/asset.model.js';
 
 export default class AssetController {
   // Add a new Asset
@@ -56,7 +56,7 @@ export default class AssetController {
       res.status(200).json({
         success: true,
         count: assets.length,
-        data: assets.sort((a, b) => b - a),
+        data: assets.sort((a, b) => b.date - a.date),
       });
     } catch (error) {
       // res.status(500).send('Error retriving asset: ' + error.message);
