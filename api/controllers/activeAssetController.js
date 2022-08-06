@@ -162,4 +162,37 @@ export default class ActiveAssetController {
       next(error);
     }
   }
+
+  static async updateEthereumAsset(req, res, next) {
+    try {
+      const { user_id, position, cost_basis, date, type } = req.body;
+      const ethFields = {
+        type: 'crypto',
+        api_id: 'ethereum',
+      };
+      let updateResult;
+      const ethAsset = await ActiveAsset.findById({
+        user_id,
+        ...ethFields,
+      }).exec();
+      if (ethAsset) {
+        ethAsset.position = position;
+        // Current set method, may decide to do +/- instead
+        ethAsset.cost_basis = cost_basis;
+        ethAsset.date = date;
+        await ethAsset.save();
+        updateResult = ethAsset;
+      } else {
+        const newEthAsset = new ActiveAsset({
+          ...ethFields,
+          ...req.body,
+        });
+        await newEthAsset.save();
+        updateResult = newEthAsset;
+      }
+      res.status(200).json(updateResult);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
