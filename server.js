@@ -6,7 +6,7 @@ import assetRouter from './api/routes/assetRoutes.js';
 import checkinRouter from './api/routes/checkinRoutes.js';
 import streakRouter from './api/routes/streakRoutes.js';
 import transactionRouter from './api/routes/transactionRoutes.js';
-import watchlistItemRouter from './api/routes/watchlistRoutes';
+import watchlistItemRouter from './api/routes/watchlistRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import jwtCheck from './middleware/jwtCheck.js';
 import userMiddleware from './middleware/userMiddleware.js';
