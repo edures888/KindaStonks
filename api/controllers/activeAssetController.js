@@ -134,7 +134,7 @@ export default class ActiveAssetController {
         name: 'Ethereum Metamask',
       };
       let updateResult;
-      const ethAsset = await ActiveAsset.findById({
+      const ethAsset = await ActiveAsset.findOne({
         user_id,
         ...ethFields,
       }).exec();
