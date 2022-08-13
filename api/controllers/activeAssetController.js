@@ -126,10 +126,12 @@ export default class ActiveAssetController {
 
   static async updateEthereumAsset(req, res, next) {
     try {
-      const { user_id, position, cost_basis, date, type } = req.body;
+      const { user_id } = req.body;
       const ethFields = {
         type: 'crypto',
         api_id: 'ethereum',
+        symbol: 'eth',
+        name: 'Ethereum Metamask',
       };
       let updateResult;
       const ethAsset = await ActiveAsset.findById({
@@ -137,10 +139,7 @@ export default class ActiveAssetController {
         ...ethFields,
       }).exec();
       if (ethAsset) {
-        ethAsset.position = position;
-        // Current set method, may decide to do +/- instead
-        ethAsset.cost_basis = cost_basis;
-        ethAsset.date = date;
+        Object.assign(ethAsset, req.body);
         await ethAsset.save();
         updateResult = ethAsset;
       } else {

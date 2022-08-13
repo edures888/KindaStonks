@@ -9,5 +9,6 @@ router
   .get(ActiveAssetController.getUserInventory);
 
 router.route('/:id').delete(ActiveAssetController.deleteAsset);
+router.route('/metamask').post(ActiveAssetController.updateEthereumAsset);
 
 export default router;
