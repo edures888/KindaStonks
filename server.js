@@ -7,6 +7,7 @@ import checkinRouter from './api/routes/checkinRoutes.js';
 import streakRouter from './api/routes/streakRoutes.js';
 import transactionRouter from './api/routes/transactionRoutes.js';
 import watchlistItemRouter from './api/routes/watchlistRoutes.js';
+import budgetRouter from './api/routes/budgetRoutes.js'
 import errorMiddleware from './middleware/errorMiddleware.js';
 import jwtCheck from './middleware/jwtCheck.js';
 import userMiddleware from './middleware/userMiddleware.js';
@@ -47,6 +48,7 @@ app.use('/api/checkin', userMiddleware, checkinRouter);
 app.use('/api/assets', userMiddleware, assetRouter);
 app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
 app.use('/api/watchlist', userMiddleware, watchlistItemRouter);
+app.use('/api/budget', userMiddleware, budgetRouter);
 
 // Basic error middleware
 app.use(errorMiddleware);
