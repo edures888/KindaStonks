@@ -1,6 +1,5 @@
-import axios from 'axios';
-import ActiveAsset from '../models/activeAsset.model.js';
-import { alphaAPIKey } from '../utils/env.dev.js';
+import ActiveAsset from '../../models/activeAsset.model.js';
+import { fetchMarketData } from '../../services/marketsService.js';
 
 export default class ActiveAssetController {
   // Adds a new Active Asset if it doesnt already exist in user inventory
@@ -78,46 +77,8 @@ export default class ActiveAssetController {
       const { user_id } = req.body;
       // lean() for assets to be raw JSON object, instead of Mongoose Document
       const assets = await ActiveAsset.find({ user_id }).lean();
-      let fetchSuccess = true;
 
-      // Price fetching for all assets
-      await Promise.all(
-        assets.map(async (asset) => {
-          // Convert Date object in date to String
-          asset.date = asset.date.toISOString();
-
-          if (asset.type === 'stocks') {
-            await axios
-              .get(
-                `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${asset.symbol}&apikey=${alphaAPIKey}`
-              )
-              .then((res) => {
-                if (!res.data['Global Quote']) {
-                  asset.price = NaN;
-                } else {
-                  asset.price = res.data['Global Quote']['05. price'];
-                }
-              })
-              .catch((err) => {
-                console.log(err);
-                fetchSuccess = false;
-              });
-            // Possible use better error handling
-          } else {
-            await axios
-              .get(
-                `https://api.coingecko.com/api/v3/coins/${asset.api_id}?localization=false&tickers=false&community_data=false&developer_data=false&sparkline=false`
-              )
-              .then((res) => {
-                asset.price = res.data.market_data.current_price.sgd;
-              })
-              .catch((err) => {
-                console.log(err);
-                fetchSuccess = false;
-              });
-          }
-        })
-      );
+      const { assetsWithData, fetchSuccess } = await fetchMarketData(assets);
       // If any price fetching returns empty data
       if (!fetchSuccess) {
         res
@@ -126,12 +87,13 @@ export default class ActiveAssetController {
             'Error retrieving inventory: ' +
               'Unable to retrieve current price from Stock/Crypto APIs'
           );
+        return;
       }
 
       res.status(200).json({
         success: true,
-        count: assets.length,
-        data: assets,
+        count: assetsWithData.length,
+        data: assetsWithData,
       });
     } catch (error) {
       // res.status(500).send('Error retriving inventory: ' + error.message);
@@ -159,6 +121,38 @@ export default class ActiveAssetController {
       res.status(200).send(req.params.id + ' active asset deleted');
     } catch (error) {
       // res.status(500).send('Error deleting active asset: ' + error.message);
+      next(error);
+    }
+  }
+
+  static async updateEthereumAsset(req, res, next) {
+    try {
+      const { user_id } = req.body;
+      const ethFields = {
+        type: 'crypto',
+        api_id: 'ethereum',
+        symbol: 'eth',
+        name: 'Ethereum Metamask',
+      };
+      let updateResult;
+      const ethAsset = await ActiveAsset.findOne({
+        user_id,
+        ...ethFields,
+      }).exec();
+      if (ethAsset) {
+        Object.assign(ethAsset, req.body);
+        await ethAsset.save();
+        updateResult = ethAsset;
+      } else {
+        const newEthAsset = new ActiveAsset({
+          ...ethFields,
+          ...req.body,
+        });
+        await newEthAsset.save();
+        updateResult = newEthAsset;
+      }
+      res.status(200).json(updateResult);
+    } catch (error) {
       next(error);
     }
   }

@@ -1,5 +1,5 @@
-import { differenceInCalendarDays, isToday, parseISO, subDays } from "date-fns";
-import Checkin from "../models/checkin.model.js";
+import { differenceInCalendarDays, isToday, parseISO, subDays } from 'date-fns';
+import Checkin from '../../models/checkin.model.js';
 
 export default class StreakController {
   // Get user-specific streak
@@ -39,7 +39,6 @@ export default class StreakController {
         data: streakCounter,
       });
     } catch (error) {
-      res.status(500).send("Error retriving streaks: " + error.message);
       next(error);
     }
   }
