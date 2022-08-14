@@ -1,5 +1,5 @@
 import WatchlistItem from '../../models/watchlistItem.model.js';
-import { fetchPrice } from '../../services/marketsService.js';
+import { fetchMarketData } from '../../services/marketsService.js';
 
 export default class WatchlistController {
   // Add a new Asset
@@ -33,7 +33,7 @@ export default class WatchlistController {
       const { user_id } = req.body;
       const list = await WatchlistItem.find({ user_id }).lean();
       // fetch from external API
-      const { assetsWithPrice, fetchSuccess } = await fetchPrice(list);
+      const { assetsWithData, fetchSuccess } = await fetchMarketData(list);
 
       if (!fetchSuccess) {
         res
@@ -42,12 +42,13 @@ export default class WatchlistController {
             'Error retrieving inventory: ' +
               'Unable to retrieve current price from Stock/Crypto APIs'
           );
+        return;
       }
 
       res.status(200).json({
         success: true,
-        count: assetsWithPrice.length,
-        data: assetsWithPrice,
+        count: assetsWithData.length,
+        data: assetsWithData,
       });
     } catch (error) {
       // res.status(500).send('Error retriving asset: ' + error.message);

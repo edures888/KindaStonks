@@ -1,5 +1,5 @@
-import Checkin from "../../models/checkin.model.js";
-import { isToday } from "date-fns";
+import Checkin from '../../models/checkin.model.js';
+import { isToday } from 'date-fns';
 
 export default class CheckinController {
   // Add new check-in
@@ -24,7 +24,6 @@ export default class CheckinController {
 
       res.status(200).json(newCheckin);
     } catch (error) {
-      res.status(500).send("Error adding checkin: " + error.message);
       next(error);
     }
   }

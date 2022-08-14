@@ -1,5 +1,5 @@
 import ActiveAsset from '../../models/activeAsset.model.js';
-import { fetchPrice } from '../../services/marketsService.js';
+import { fetchMarketData } from '../../services/marketsService.js';
 
 export default class ActiveAssetController {
   // Adds a new Active Asset if it doesnt already exist in user inventory
@@ -78,7 +78,7 @@ export default class ActiveAssetController {
       // lean() for assets to be raw JSON object, instead of Mongoose Document
       const assets = await ActiveAsset.find({ user_id }).lean();
 
-      const { assetsWithPrice, fetchSuccess } = await fetchPrice(assets);
+      const { assetsWithData, fetchSuccess } = await fetchMarketData(assets);
       // If any price fetching returns empty data
       if (!fetchSuccess) {
         res
@@ -87,12 +87,13 @@ export default class ActiveAssetController {
             'Error retrieving inventory: ' +
               'Unable to retrieve current price from Stock/Crypto APIs'
           );
+        return;
       }
 
       res.status(200).json({
         success: true,
-        count: assetsWithPrice.length,
-        data: assetsWithPrice,
+        count: assetsWithData.length,
+        data: assetsWithData,
       });
     } catch (error) {
       // res.status(500).send('Error retriving inventory: ' + error.message);
