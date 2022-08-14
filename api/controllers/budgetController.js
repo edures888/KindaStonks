@@ -1,4 +1,4 @@
-import Budget from "../models/budget.model.js";
+import Budget from "../../models/budget.model.js";
 
 export default class BudgetController {
   // Set a new budget
