@@ -3,7 +3,7 @@ import Transaction from '../models/transaction.model.js';
 export default class TransactionController {
   // Add a new transaction
   static async addTransaction(req, res, next) {
-    const { user_id, amount, date, category, note } = req.body;
+    const { user_id, label, amount, date, category } = req.body;
     try {
       if (!amount) {
         res.status(400).send('Missing amount for adding Transaction');
@@ -17,10 +17,11 @@ export default class TransactionController {
 
       const newTransaction = new Transaction({
         user_id,
+        label,
         amount,
         date,
         category,
-        note,
+        
       });
 
       await newTransaction.save();

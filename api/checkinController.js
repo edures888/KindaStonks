@@ -28,4 +28,24 @@ export default class CheckinController {
       next(error);
     }
   }
+
+  static async isTodayCheckin(req, res, next) {
+    try {
+      const { user_id } = req.body;
+      const checkins = await Checkin.find({ user_id });
+      let today = false;
+      if (checkins.length > 0) {
+        if (isToday(checkins[checkins.length - 1].createdAt)) {
+          today = true;
+        }
+      }
+      res.status(200).json({
+        success: true,
+        data: today,
+      });
+    } catch (error) {
+      res.status(500).send("Error retriving latest checkin: " + error.message);
+      next(error);
+    }
+  }
 }

@@ -6,6 +6,7 @@ import transactionRouter from './api/transactionRoutes.js';
 import streakRouter from './api/streakRoutes.js'
 import checkinRouter from './api/checkinRoutes.js';
 import assetRouter from './api/assetRoutes.js';
+import budgetRouter from './api/budgetRoutes.js'
 import activeAssetRouter from './api/activeAssetRoutes.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import { clientOriginUrl, nodeEnv, serverPort } from './utils/env.dev.js';
@@ -45,6 +46,7 @@ app.use('/api/streak', userMiddleware,streakRouter);
 app.use('/api/checkin', userMiddleware,checkinRouter);
 app.use('/api/assets', userMiddleware, assetRouter);
 app.use('/api/activeAssets', userMiddleware, activeAssetRouter);
+app.use('/api/budget', userMiddleware, budgetRouter);
 
 // Basic error middleware
 app.use(errorMiddleware);
