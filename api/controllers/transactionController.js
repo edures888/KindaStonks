@@ -60,7 +60,6 @@ export default class TransactionController {
         data: transactions,
       });
     } catch (error) {
-      // res.status(500).send('Error retriving transaction: ' + error.message);
       next(error);
     }
   }
