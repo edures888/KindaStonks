@@ -16,7 +16,6 @@ export default class CheckinController {
       // If latest check-in is not today, add new check-in for today
       if (checkins > 0) {
         if (!isToday(checkins[checkins.length - 1].createdAt)) {
-          await newCheckin.save();
         }
       } else {
         await newCheckin.save();
