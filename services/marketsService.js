@@ -19,19 +19,20 @@ async function fetchMarketData(assets) {
             )
             .then((res) => {
               if (!res.data['Global Quote']) {
-                asset.price = NaN;
-                asset.percentageChange = NaN;
+                asset.price = null;
+                asset.percentageChange = null;
               } else {
                 asset.price = res.data['Global Quote']['05. price'];
                 asset.percentageChange =
                   res.data['Global Quote']['10. change percent'];
               }
             })
-            .catch((err) => {
-              console.log(err);
+            .catch((error) => {
+              asset.price = null;
+              asset.percentageChange = null;
+              console.log(error);
               fetchSuccess = false;
             });
-          // Possible use better error handling
         } else {
           await axios
             .get(
@@ -40,10 +41,6 @@ async function fetchMarketData(assets) {
             .then((res) => {
               asset.price = res.data.market_data.current_price.usd;
               asset.percentageChange = `${res.data.market_data.price_change_percentage_24h}%`;
-            })
-            .catch((err) => {
-              console.log(err);
-              fetchSuccess = false;
             });
         }
       })

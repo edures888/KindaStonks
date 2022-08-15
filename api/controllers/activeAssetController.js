@@ -80,15 +80,14 @@ export default class ActiveAssetController {
 
       const { assetsWithData, fetchSuccess } = await fetchMarketData(assets);
       // If any price fetching returns empty data
-      if (!fetchSuccess) {
-        res
-          .status(500)
-          .send(
-            'Error retrieving inventory: ' +
-              'Unable to retrieve current price from Stock/Crypto APIs'
-          );
-        return;
-      }
+      // if (!fetchSuccess) {
+      //   res.status(200).json({
+      //     success: true,
+      //     count: assets.length,
+      //     data: assets,
+      //   });
+      //   return;
+      // }
 
       res.status(200).json({
         success: true,
