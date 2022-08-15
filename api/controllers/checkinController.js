@@ -32,8 +32,6 @@ export default class CheckinController {
     try {
       const { user_id } = req.body;
       const checkins = await Checkin.find({ user_id });
-
-      console.log(checkins);
       res.status(200).json({
         success: true,
         count: checkins.length,
