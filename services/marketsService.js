@@ -41,6 +41,12 @@ async function fetchMarketData(assets) {
             .then((res) => {
               asset.price = res.data.market_data.current_price.usd;
               asset.percentageChange = `${res.data.market_data.price_change_percentage_24h}%`;
+            })
+            .catch((error) => {
+              asset.price = null;
+              asset.percentageChange = null;
+              console.log(error);
+              fetchSuccess = false;
             });
         }
       })
