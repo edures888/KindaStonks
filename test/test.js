@@ -48,6 +48,7 @@ after(async () => {
 describe('Transaction Positive Test Cases', () => {
   let transaction_id = ''; // Used in retrieval & deletion test
   const amount = 999;
+  const label = 'label';
   const date = new Date().toISOString();
 
   describe('GET /api/transactions', () => {
@@ -77,12 +78,14 @@ describe('Transaction Positive Test Cases', () => {
           user_id,
           amount,
           date,
+          label,
         });
       expect(res).to.have.status(200);
       expect(res.body).to.be.a('object');
       expect(res.body).to.property('user_id', user_id);
       expect(res.body).to.property('amount', amount);
       expect(res.body).to.property('date', date);
+      expect(res.body).to.property('label', label);
       transaction_id = _.get(res.body, '_id');
     });
   });
@@ -449,6 +452,42 @@ describe('Active Asset Positive Test Cases', () => {
         'No more owned units, existing asset removed'
       );
       expect(res.body).to.nested.include({ asset: name });
+    });
+  });
+
+  describe('POST /api/activeAssets/metamask', () => {
+    it('Simulate syncing of Metamask Ethereum into Active assets', async () => {
+      const res = await chai
+        .request(app)
+        .post('/api/activeAssets/metamask')
+        .auth(access_token, { type: 'bearer' })
+        .send({
+          user_id,
+          position: buyPosition,
+          cost_basis,
+        });
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.a('object');
+      expect(res.body).to.nested.include({ position: buyPosition });
+      expect(res.body).to.nested.include({ cost_basis });
+    });
+  });
+
+  describe('POST /api/activeAssets/metamask', () => {
+    it('Simulate updating of Metamask Ethereum into Active assets with changed position and cost basis values', async () => {
+      const res = await chai
+        .request(app)
+        .post('/api/activeAssets/metamask')
+        .auth(access_token, { type: 'bearer' })
+        .send({
+          user_id,
+          position: doubledPosition,
+          cost_basis: doubled_cost_basis,
+        });
+      expect(res).to.have.status(200);
+      expect(res.body).to.be.a('object');
+      expect(res.body).to.nested.include({ position: doubledPosition });
+      expect(res.body).to.nested.include({ cost_basis: doubled_cost_basis });
     });
   });
 });

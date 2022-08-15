@@ -14,6 +14,10 @@ export default class TransactionController {
         res.status(400).send('Missing date for adding Transaction');
         return;
       }
+      if (!label) {
+        res.status(400).send('Missing label for adding Transaction');
+        return;
+      }
 
       const newTransaction = new Transaction({
         user_id,
@@ -21,7 +25,6 @@ export default class TransactionController {
         amount,
         date,
         category,
-        
       });
 
       await newTransaction.save();
