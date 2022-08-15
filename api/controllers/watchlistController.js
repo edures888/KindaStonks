@@ -35,16 +35,6 @@ export default class WatchlistController {
       // fetch from external API
       const { assetsWithData, fetchSuccess } = await fetchMarketData(list);
 
-      if (!fetchSuccess) {
-        res
-          .status(500)
-          .send(
-            'Error retrieving inventory: ' +
-              'Unable to retrieve current price from Stock/Crypto APIs'
-          );
-        return;
-      }
-
       res.status(200).json({
         success: true,
         count: assetsWithData.length,
